@@ -240,7 +240,11 @@ namespace SQL
 
 
 
-
+        /// <summary>
+        /// 执行使用数据库命令。
+        /// </summary>
+        /// <param name="DatabaseName">要使用的数据库名称</param>
+        /// <returns>执行成功则返回 <c>true</c> ，否则返回 <c>false</c> 。</returns>
         public bool UseDatabase(string DatabaseName)
         {
             bool Result = true;
