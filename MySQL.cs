@@ -246,7 +246,7 @@ namespace SQL
             bool Result = true;
             try
             {
-                MySqlCommand temp = new MySqlCommand(DatabaseName, Connection);
+                MySqlCommand temp = new MySqlCommand("USE " + DatabaseName, Connection);
                 temp.ExecuteNonQuery();
             }
             catch (Exception Error)
