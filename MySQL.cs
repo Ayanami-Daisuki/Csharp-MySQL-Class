@@ -252,11 +252,26 @@ namespace SQL
 
 
 
+        /// <summary>
+        /// 执行创建数据库的命令。
+        /// </summary>
+        /// <param name="DatabaseName">要创建的数据库名称</param>
+        /// <param name="Charset">该数据库使用的编码格式，可以为 <c>null</c></param>
+        /// <returns>执行成功则返回 <c>true</c> ，否则返回 <c>false</c> 。</returns>
+        public bool CreateDatabase(string DatabaseName, string? Charset)
+        {
+            string temp = DatabaseName;
+            if (Charset != null)
+                temp += "CHARACTER SET " + Charset;
+            return Execute(temp) != -1;
+        }
+
+
 
         /// <summary>
         /// 执行创建表的命令。
         /// </summary>
-        /// <param name="Table">表名</param>
+        /// <param name="Table">要创建的表名</param>
         /// <param name="Attributes">各个属性的名称</param>
         /// <param name="Type">各个属性对应的类型</param>
         /// <param name="Constraint">各个属性对应的约束，其中的元素可以为 <c>null</c></param>
