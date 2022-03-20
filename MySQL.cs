@@ -247,21 +247,40 @@ namespace SQL
         /// <returns>执行成功则返回 <c>true</c> ，否则返回 <c>false</c> 。</returns>
         public bool UseDatabase(string DatabaseName)
         {
+            return Execute("USE " + DatabaseName) == -1 ? false : true;
+        }
+
+
+
+
+        public bool CreateTable(string Table, string[] Attributes, string[] Type)
+        {
             bool Result = true;
+            string TableInfo = "";
+            if (Attributes.Length != Type.Length)
+            {
+                if (showDebugInfo)
+                {
+                    Console.WriteLine("创建表时出错！");
+                    Console.WriteLine("\t报错信息：“Attributes” 与 “Type” 长度不一致");
+                }
+            }
+            for (int i = 0; i < Attributes.Length - 1; i++)
+            {
+                TableInfo += Attributes[i] + " " + Type[i] + ",";
+            }
+            TableInfo += Attributes[Attributes.Length - 1] + " " + Type[Attributes.Length - 1];
             try
             {
-                MySqlCommand temp = new MySqlCommand("USE " + DatabaseName, Connection);
-                temp.ExecuteNonQuery();
+
             }
             catch (Exception Error)
             {
-                Result = false;
                 if (ShowDebugInfo)
                 {
-                    Console.WriteLine("切换数据库时出错！");
+                    Console.WriteLine("创建表时出错！");
                     Console.WriteLine("\t报错信息：" + Error.Message);
                 }
-
             }
             return Result;
         }
