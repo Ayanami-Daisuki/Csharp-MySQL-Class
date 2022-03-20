@@ -14,12 +14,18 @@ namespace MainProgram
             Console.WriteLine("输出结果为：" + Target.CreateTable(
                 "test",
                 new string[] { "age", "name" },
-                new string[] { "INT", "VARCHAR(10)" }
+                new string[] { "INT", "VARCHAR(10)" },
                 new string?[] { null, "NOT NULL" },
                 new string?[] { "年龄", "姓名" },
                 "UTF8"));
             Console.WriteLine("Hello, world!");
-            MySQL.FormattedPrint(Target.Query("SELECT DATABASE()"), new string[] { "数据库" }, new int[] { 10 });
+            Console.WriteLine(Target.Insert(
+                "test",
+                new string[] { "age", "name" },
+                new string[] { "24", "'田所浩二'" }));
+            MySQL.FormattedPrint(Target.Query("SELECT * FROM test"),
+                new string[] { "年龄", "姓名" },
+                new int[] { 10, 10 });
             Console.ReadLine();
 
             /* 创建数据库 */

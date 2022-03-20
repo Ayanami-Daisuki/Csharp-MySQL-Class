@@ -269,6 +269,18 @@ namespace SQL
 
 
         /// <summary>
+        /// 执行删除数据库的命令。
+        /// </summary>
+        /// <param name="DatabaseName">要删除的数据库名称</param>
+        /// <returns>执行成功则返回 <c>true</c> ，否则返回 <c>false</c> 。</returns>
+        public bool DeleteDatabase(string DatabaseName)
+        {
+            return Execute("DROP DATABASE " + DatabaseName) != -1;
+        }
+
+
+
+        /// <summary>
         /// 执行创建表的命令。
         /// </summary>
         /// <param name="Table">要创建的表名</param>
@@ -280,7 +292,6 @@ namespace SQL
         /// <returns>执行成功则返回 <c>true</c> ，否则返回 <c>false</c> 。</returns>
         public bool CreateTable(string Table, string[] Attributes, string[] Type, string?[] Constraint, string?[] Comment, string? Charset)
         {
-            string temp = "";
             if (Attributes.Length != Type.Length || Attributes.Length != Constraint.Length || Attributes.Length != Comment.Length)
             {
                 if (showDebugInfo)
@@ -290,6 +301,7 @@ namespace SQL
                 }
                 return false;
             }
+            string temp = "";
             for (int i = 0; i < Attributes.Length - 1; i++)
             {
                 temp += Attributes[i] + " " + Type[i];
@@ -308,6 +320,41 @@ namespace SQL
                 temp = "CREATE TABLE " + Table + " (" + temp + ") DEFAULT CHARSET = " + Charset;
             else
                 temp = "CREATE TABLE " + Table + " (" + temp + ")";
+            return Execute(temp) != -1;
+        }
+
+
+
+        /// <summary>
+        /// 执行向表中插入数据的命令。
+        /// </summary>
+        /// <param name="Table">要插入数据的表名</param>
+        /// <param name="AttributeNames">要插入的数据的属性名</param>
+        /// <param name="AttributeValues">要插入的数据的属性值，不要忘记单引号</param>
+        /// <returns>执行成功则返回 <c>true</c> ，否则返回 <c>false</c> 。</returns>
+        public bool Insert(string Table, string[] AttributeNames, string[] AttributeValues)
+        {
+            if (AttributeNames.Length != AttributeValues.Length)
+            {
+                if (showDebugInfo)
+                {
+                    Console.WriteLine("插入数据时出错！");
+                    Console.WriteLine("\t报错信息：“AttributeNames” 与 “AttributeValues” 长度不一致");
+                }
+                return false;
+            }
+            string temp = "INSERT " + Table + " (";
+            for (int i = 0; i < AttributeNames.Length - 1; i++)
+            {
+                temp += AttributeNames[i] + ",";
+            }
+            temp += AttributeNames[^1] + ") VALUES (";
+            for (int i = 0; i < AttributeValues.Length - 1; i++)
+            {
+                temp += AttributeValues[i] + ",";
+            }
+            temp += AttributeValues[^1] + ")";
+            Console.WriteLine(temp);
             return Execute(temp) != -1;
         }
 
