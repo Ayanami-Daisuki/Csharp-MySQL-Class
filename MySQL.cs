@@ -247,42 +247,53 @@ namespace SQL
         /// <returns>执行成功则返回 <c>true</c> ，否则返回 <c>false</c> 。</returns>
         public bool UseDatabase(string DatabaseName)
         {
-            return Execute("USE " + DatabaseName) == -1 ? false : true;
+            return Execute("USE " + DatabaseName) != -1;
         }
 
 
 
 
-        public bool CreateTable(string Table, string[] Attributes, string[] Type)
+        /// <summary>
+        /// 执行创建表的命令。
+        /// </summary>
+        /// <param name="Table">表名</param>
+        /// <param name="Attributes">各个属性的名称</param>
+        /// <param name="Type">各个属性对应的类型</param>
+        /// <param name="Constraint">各个属性对应的约束，其中的元素可以为 <c>null</c></param>
+        /// <param name="Comment">各个属性对应的注释，其中的元素可以为<c>null</c></param>
+        /// <param name="Charset">该表使用的编码格式，可以为 <c>null</c></param>
+        /// <returns>执行成功则返回 <c>true</c> ，否则返回 <c>false</c> 。</returns>
+        public bool CreateTable(string Table, string[] Attributes, string[] Type, string?[] Constraint, string?[] Comment, string? Charset)
         {
-            bool Result = true;
-            string TableInfo = "";
-            if (Attributes.Length != Type.Length)
+            string temp = "";
+            if (Attributes.Length != Type.Length || Attributes.Length != Constraint.Length || Attributes.Length != Comment.Length)
             {
                 if (showDebugInfo)
                 {
                     Console.WriteLine("创建表时出错！");
                     Console.WriteLine("\t报错信息：“Attributes” 与 “Type” 长度不一致");
                 }
+                return false;
             }
             for (int i = 0; i < Attributes.Length - 1; i++)
             {
-                TableInfo += Attributes[i] + " " + Type[i] + ",";
+                temp += Attributes[i] + " " + Type[i];
+                if (Constraint[i] != null)
+                    temp += " " + Constraint[i];
+                if (Comment[i] != null)
+                    temp += " COMMENT '" + Comment[i] + "'";
+                temp += ",";
             }
-            TableInfo += Attributes[Attributes.Length - 1] + " " + Type[Attributes.Length - 1];
-            try
-            {
-
-            }
-            catch (Exception Error)
-            {
-                if (ShowDebugInfo)
-                {
-                    Console.WriteLine("创建表时出错！");
-                    Console.WriteLine("\t报错信息：" + Error.Message);
-                }
-            }
-            return Result;
+            temp += Attributes[^1] + " " + Type[^1];
+            if (Constraint[^1] != null)
+                temp += " " + Constraint[^1];
+            if (Comment[^1] != null)
+                temp += " COMMENT '" + Comment[^1] + "'";
+            if (Charset != null)
+                temp = "CREATE TABLE " + Table + " (" + temp + ") DEFAULT CHARSET = " + Charset;
+            else
+                temp = "CREATE TABLE " + Table + " (" + temp + ")";
+            return Execute(temp) != -1;
         }
 
 

@@ -11,6 +11,13 @@ namespace MainProgram
             MySQL Target = new("127.0.0.1", "3306", "root", "718293753951");
             Target.ShowDebugInfo = false;
             Console.WriteLine("输出结果为：" + Target.UseDatabase("ctos"));
+            Console.WriteLine("输出结果为：" + Target.CreateTable(
+                "test",
+                new string[] { "age", "name" },
+                new string[] { "INT", "VARCHAR(10)" }
+                new string?[] { null, "NOT NULL" },
+                new string?[] { "年龄", "姓名" },
+                "UTF8"));
             Console.WriteLine("Hello, world!");
             MySQL.FormattedPrint(Target.Query("SELECT DATABASE()"), new string[] { "数据库" }, new int[] { 10 });
             Console.ReadLine();
