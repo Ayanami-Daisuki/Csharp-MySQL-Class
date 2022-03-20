@@ -240,6 +240,30 @@ namespace SQL
 
 
 
+
+        public bool UseDatabase(string DatabaseName)
+        {
+            bool Result = true;
+            try
+            {
+                MySqlCommand temp = new MySqlCommand(DatabaseName, Connection);
+                temp.ExecuteNonQuery();
+            }
+            catch (Exception Error)
+            {
+                Result = false;
+                if (ShowDebugInfo)
+                {
+                    Console.WriteLine("切换数据库时出错！");
+                    Console.WriteLine("\t报错信息：" + Error.Message);
+                }
+
+            }
+            return Result;
+        }
+
+
+
         /// <summary>
         /// 判断元素是否在容器内。
         /// </summary>
