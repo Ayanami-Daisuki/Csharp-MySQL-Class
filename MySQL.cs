@@ -354,7 +354,40 @@ namespace SQL
                 temp += AttributeValues[i] + ",";
             }
             temp += AttributeValues[^1] + ")";
-            Console.WriteLine(temp);
+            return Execute(temp) != -1;
+        }
+
+
+
+        /// <summary>
+        /// 执行修改表中数据的命令。
+        /// </summary>
+        /// <param name="Table">要修改数据的表名</param>
+        /// <param name="AttributeNames">要修改的属性名</param>
+        /// <param name="AttributeValues">新的属性值</param>
+        /// <param name="Conditions">用于筛选要修改的条目的SQL语句</param>
+        /// <returns></returns>
+        public bool Update(string Table, string[] AttributeNames, string[] AttributeValues, string? Conditions)
+        {
+            if (AttributeNames.Length != AttributeValues.Length)
+            {
+                if (showDebugInfo)
+                {
+                    Console.WriteLine("插入数据时出错！");
+                    Console.WriteLine("\t报错信息：“AttributeNames” 与 “AttributeValues” 长度不一致");
+                }
+                return false;
+            }
+            string temp = "UPDATE " + Table + " SET ";
+            for (int i = 0; i < AttributeNames.Length - 1; i++)
+            {
+                temp += AttributeNames[i] + "=" + AttributeValues[i] + ",";
+            }
+            temp += AttributeNames[^1] + "=" + AttributeValues[^1];
+            if (Conditions != null)
+            {
+                temp += " WHERE " + Conditions;
+            }
             return Execute(temp) != -1;
         }
 

@@ -23,6 +23,10 @@ namespace MainProgram
                 "test",
                 new string[] { "age", "name" },
                 new string[] { "24", "'田所浩二'" }));
+            Target.Update("test",
+                new string[] { "age" },
+                new string[] { "36" },
+                "name='田所浩二'");
             MySQL.FormattedPrint(Target.Query("SELECT * FROM test"),
                 new string[] { "年龄", "姓名" },
                 new int[] { 10, 10 });
