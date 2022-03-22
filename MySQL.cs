@@ -65,7 +65,7 @@ namespace SQL
         /// <summary>
         /// 控制是否打印执行信息。默认为 <c>true</c>。
         /// </summary>
-        private bool ShowExecuteStatus
+        public bool ShowExecuteStatus
         {
             get => showExecuteStatus;
             set
@@ -417,8 +417,20 @@ namespace SQL
         /// </summary>
         /// <param name="Result">要打印的对象</param>
         /// <param name="ColumnName">每一列的名称</param>
-        public static void FormattedPrint(List<List<string>> Result, string[] ColumnName, int[] Area)
+        public static void FormattedPrint(List<List<string>> Result, string[] ColumnName)
         {
+            int[] Area = new int[ColumnName.Length];
+            for (int i = 0; i < ColumnName.Length; i++)
+            {
+                Area[i] = Length(ColumnName[i]);
+            }
+            for (int i = 0; i < Result.Count; i++)
+            {
+                for (int j = 0; j < Result[i].Count; j++)
+                {
+                    Area[j] = Length(Result[i][j]) > Area[j] ? Length(Result[i][j]) : Area[j];
+                }
+            }
             Console.Write("+");
             for (int i = 0; i < Area.Length; i++)
             {
