@@ -6,7 +6,7 @@ namespace MainProgram
     {
         public static void Main()
         {
-            EXP3();
+            EXP2();
         }
 
         public static void EXP3()

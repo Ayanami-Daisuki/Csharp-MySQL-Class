@@ -31,6 +31,6 @@
 | <code>Query()</code> | 否 | <code>string</code> | SQL查询语句 | 执行查询语句，并返回结果。 | <code>List&lt;List&lt;string&gt;&gt;</code> | 查询的结果。保存的 <code></code> 元素保存的是每一行的结果。 |
 | <code>Execute()</code> | 否 | <code>string</code> | SQL语句 | 执行SQL语句，并返回修改的行数。 | <code>int</code> | 修改的行数，若执行失败则返回-1。 |
 | <code>Exist()</code> | <font color="red">是</font> | <code>string, List&lt;List&lt;string&gt;&gt;</code> | 待查询的元素，容器 | 查找指定的元素是否位于容器内 | <code>bool</code> | 若在容器内则返回 <code>true</code> ，否则返回 <code>false</code> |
-| <code>FormattedPrint()</code> |  <font color="red">是</font> | <code>List&lt;string&gt;, string[], int[]</code> | 待打印的查询结果，每一列的名称，每一列占据的字节宽度 | 以精美的表格形式在控制台输出查询结果 | 无 | 无 |
+| <code>FormattedPrint()</code> |  <font color="red">是</font> | <code>List&lt;string&gt;, string[]</code> | 待打印的查询结果，每一列的名称 | 以精美的表格形式在控制台输出查询结果 | 无 | 无 |
 | <code>Length()</code> |  <font color="red">是</font> | <code>string</code> | 待计算的字符串 | 计算字符串在打印时占据的字节宽度 | <code>int</code> | 该字符串在打印时占据的字节宽度 |
 | <code>Close</code> | 否 | 无 | 无 | 关闭与MySQL数据库的连接 | 无 | 无 |
