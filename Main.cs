@@ -6,6 +6,215 @@ namespace MainProgram
     {
         public static void Main()
         {
+            EXP3();
+        }
+
+        public static void EXP3()
+        {
+            /* 连接至数据库 */
+            MySQL Database = new("127.0.0.1", "3306", "root", "718293753951");
+            Database.ShowDebugInfo = true;
+            Database.ShowExecuteStatus = false;
+
+            Database.Execute("CREATE DATABASE ctos");
+            Database.Execute("USE ctos");
+
+
+            /* 第6题预处理 */
+
+            Database.Execute("CREATE TABLE Student (" +
+                "Number CHAR(10)," +
+                "Name VARCHAR(5)," +
+                "Age INT," +
+                "Gender CHAR(1)," +
+                "Address VARCHAR(50)," +
+                "ClassNumber INT) ");
+            Database.Execute("CREATE TABLE Class (" +
+                "ClassNumber INT," +
+                "ClassName CHAR(10)," +
+                "HeadTeacher VARCHAR(10)," +
+                "President VARCHAR(10))");
+            Database.Execute("CREATE USER 'U1' @'%'");
+            Database.Execute("CREATE USER 'U2' @'%'");
+
+            /* 6.(1) */
+            Console.WriteLine("6.(1)");
+            Database.Execute("GRANT ALL ON Student TO 'U1' @'%' WITH GRANT OPTION");
+            Database.Execute("GRANT ALL ON Class TO 'U1' @'%' WITH GRANT OPTION");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'U1' @'%'"), new string[] { "U1的权限列表" });
+            Console.ReadKey(false);
+
+            /* 6.(2) */
+            Console.WriteLine("6.(2)");
+            Database.Execute("GRANT SELECT ON Student TO 'U2' @'%'");
+            Database.Execute("GRANT UPDATE(Address) ON Student TO 'U2' @'%'");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'U2' @'%'"), new string[] { "U2的权限列表" });
+            Console.ReadKey(false);
+
+
+            /* 6.(3) */
+            Console.WriteLine("6.(3)");
+            Database.Execute("GRANT SELECT ON Class TO 'U1' @'%'");
+            Database.Execute("GRANT SELECT ON Class TO 'U2' @'%'");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'U1' @'%'"), new string[] { "U1的权限列表" });
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'U2' @'%'"), new string[] { "U2的权限列表" });
+            Console.ReadKey(false);
+
+            /* 6.(4) */
+            Console.WriteLine("6.(4)");
+            Database.Execute("CREATE ROLE R1");
+            Database.Execute("GRANT SELECT ON Student TO R1");
+            Database.Execute("GRANT UPDATE ON Student TO R1");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR R1"), new string[] { "R1的权限列表" });
+            Console.ReadKey(false);
+
+            /* 6.(5) */
+            Console.WriteLine("6.(5)");
+            Database.Execute("GRANT R1 TO 'U1' @'%'");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'U1' @'%'"), new string[] { "U1的权限列表" });
+            Console.ReadKey(false);
+
+            /* 第7题预处理 */
+            Database.Execute("CREATE TABLE Worker (" +
+                "Number CHAR(10)," +
+                "Name VARCHAR(5)," +
+                "Age INT," +
+                "Duty CHAR(10)," +
+                "Wage INT," +
+                "DepartNumber INT)");
+            Database.Execute("CREATE TABLE Depart (" +
+                "DepartNumber INT," +
+                "DepartName CHAR(10)," +
+                "Manager VARCHAR(10)," +
+                "Address VARCHAR(50)," +
+                "TEL CHAR(15)) ");
+
+            /*  7.(1) */
+            Console.WriteLine("7.(1)");
+            Database.Execute("CREATE USER 'WangMing' @'%'");
+            Database.Execute("GRANT SELECT ON Worker TO 'WangMing' @'%'");
+            Database.Execute("GRANT SELECT ON Depart TO 'WangMing' @'%'");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'WangMing' @'%'"), new string[] { "王明的权限列表" });
+            Console.ReadKey(false);
+
+
+            /* 7.(2) */
+            Console.WriteLine("7.(2)");
+            Database.Execute("CREATE USER 'LiYong' @'%'");
+            Database.Execute("GRANT INSERT ON Worker TO 'LiYong' @'%'");
+            Database.Execute("GRANT INSERT ON Depart TO 'LiYong' @'%'");
+            Database.Execute("GRANT DELETE ON Worker TO 'LiYong' @'%'");
+            Database.Execute("GRANT DELETE ON Depart TO 'LiYong' @'%'");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'LiYong' @'%'"), new string[] { "李勇的权限列表" });
+            Console.ReadKey(false);
+
+
+            /* 7.(3) */
+            Console.WriteLine("7.(3)");
+            Database.Execute("CREATE ROLE staff");
+            Database.Execute("CREATE VIEW SelfData (Number,Name,Age,Duty,Wage,DepartNumber) AS " +
+                "SELECT Number,Name,Age,Duty,Wage,DepartNumber FROM Worker WHERE Number = 114");
+            Database.Execute("GRANT SELECT ON SelfData TO staff");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR staff"), new string[] { "staff的权限列表" });
+            Console.ReadKey(false);
+
+
+            /* 7.(4) */
+            Console.WriteLine("7.(4)");
+            Database.Execute("CREATE USER 'LiuXing' @'%'");
+            Database.Execute("GRANT SELECT ON Worker TO 'LiuXing' @'%'");
+            Database.Execute("GRANT UPDATE(Wage) ON Worker TO 'LiuXing' @'%'");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'LiuXing' @'%'"), new string[] { "刘星的权限列表" });
+            Console.ReadKey(false);
+
+
+            /* 7.(5) */
+            Console.WriteLine("7.(5)");
+            Database.Execute("CREATE USER 'ZhangXin' @'%'");
+            Database.Execute("GRANT ALTER ON Worker TO 'ZhangXin' @'%'");
+            Database.Execute("GRANT ALTER ON Depart TO 'ZhangXin' @'%'");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'ZhangXin' @'%'"), new string[] { "张新的权限列表" });
+            Console.ReadKey(false);
+
+
+            /* 7.(6) */
+            Console.WriteLine("7.(6)");
+            Database.Execute("CREATE USER 'ZhouPing' @'%'");
+            Database.Execute("GRANT ALTER ON Worker TO 'ZhouPing' @'%' WITH GRANT OPTION");
+            Database.Execute("GRANT ALTER ON Depart TO 'ZhouPing' @'%' WITH GRANT OPTION");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'ZhouPing' @'%'"), new string[] { "周平的权限列表" });
+            Console.ReadKey(false);
+
+
+            /* 7.(7) */
+            Console.WriteLine("7.(7)");
+            Database.Execute("CREATE USER 'YangLan' @'%'");
+            Database.Execute("CREATE VIEW Statistic (highest, lowest, average) AS " +
+                "SELECT max(Wage),min(Wage),avg(Wage) FROM Worker");
+            Database.Execute("GRANT SELECT ON Statistic TO 'YangLan' @'%'");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'YangLan' @'%'"), new string[] { "杨兰的权限列表" });
+            Console.ReadKey(false);
+
+
+            /* 8 */
+            Console.WriteLine("8");
+            Database.Execute("REVOKE SELECT ON Worker FROM 'WangMing' @'%'");
+            Database.Execute("REVOKE SELECT ON Depart FROM 'WangMing' @'%'");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'WangMing' @'%'"), new string[] { "王明的权限列表" });
+
+
+            Console.ReadKey(false);
+            Database.Execute("REVOKE INSERT ON Worker FROM 'LiYong' @'%'");
+            Database.Execute("REVOKE INSERT ON Depart FROM 'LiYong' @'%'");
+            Database.Execute("REVOKE DELETE ON Worker FROM 'LiYong' @'%'");
+            Database.Execute("REVOKE DELETE ON Depart FROM 'LiYong' @'%'");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'LiYong' @'%'"), new string[] { "李勇的权限列表" });
+
+
+            Console.ReadKey(false);
+            Database.Execute("REVOKE SELECT ON SelfData FROM staff");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR staff"), new string[] { "staff的权限列表" });
+
+            Console.ReadKey(false);
+            Database.Execute("REVOKE SELECT ON Worker FROM 'LiuXing' @'%'");
+            Database.Execute("REVOKE UPDATE(Wage) ON Worker FROM 'LiuXing' @'%'");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'LiuXing' @'%'"), new string[] { "刘星的权限列表" });
+
+            Console.ReadKey(false);
+            Database.Execute("REVOKE ALTER ON Worker FROM 'ZhangXin' @'%'");
+            Database.Execute("REVOKE ALTER ON Depart FROM 'ZhangXin' @'%'");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'ZhangXin' @'%'"), new string[] { "张新的权限列表" });
+
+            Console.ReadKey(false);
+            Database.Execute("REVOKE ALTER ON Worker FROM 'ZhouPing' @'%'");
+            Database.Execute("REVOKE ALTER ON Depart FROM 'ZhouPing' @'%'");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'ZhouPing' @'%'"), new string[] { "周平的权限列表" });
+
+            Console.ReadKey(false);
+            Database.Execute("REVOKE SELECT ON Statistic FROM 'YangLan' @'%'");
+            MySQL.FormattedPrint(Database.Query("SHOW GRANTS FOR 'YangLan' @'%'"), new string[] { "杨兰的权限列表" });
+
+
+
+            /* 清除数据 */
+            Database.Execute("DROP VIEW Statistic");
+            Database.Execute("DROP USER 'YangLan' @'%'");
+            Database.Execute("DROP USER 'ZhouPing' @'%'");
+            Database.Execute("DROP USER 'ZhangXin' @'%'");
+            Database.Execute("DROP USER 'LiuXing' @'%'");
+            Database.Execute("DROP VIEW SelfData");
+            Database.Execute("DROP ROLE staff");
+            Database.Execute("DROP USER 'LiYong' @'%'");
+            Database.Execute("DROP USER 'WangMing' @'%'");
+            Database.Execute("DROP ROLE R1");
+            Database.Execute("DROP USER 'U1' @'%'");
+            Database.Execute("DROP USER 'U2' @'%'");
+            Database.Execute("DROP DATABASE ctos");
+            Database.Close();
+        }
+
+        public static void EXP2()
+        {
             /* 连接至数据库 */
             MySQL Database = new("127.0.0.1", "3306", "root", "718293753951");
             Database.ShowDebugInfo = true;
@@ -297,6 +506,10 @@ namespace MainProgram
                                 "WHERE sno='S1'"),
                 new string[] { "零件代码", "零件名称", "零件重量", "零件颜色", "供应数量", "供应商状态" });
             Console.ReadKey();
+
+
+            Database.Execute("DROP DATABASE spj");
+            Database.Close();
         }
     }
 }
